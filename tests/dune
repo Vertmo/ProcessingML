@@ -1,0 +1,7 @@
+(executable
+  (name tests)
+  (libraries oUnit libPML))
+
+(alias
+  (name runtest)
+  (action (run ./tests.exe)))
