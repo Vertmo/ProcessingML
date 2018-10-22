@@ -1,4 +1,4 @@
-(*******************************************r**********************************)
+(******************************************************************************)
 (*                                                                            *)
 (*                                  ProcessingML                              *)
 (*                                  Basile Pesin                              *)
@@ -16,9 +16,13 @@ let step = ref Run
 
 let speclist = [
   ("--run", Arg.Unit (fun () -> step := Run), ": Compile and run a sketch (default)");
-  ("--build", Arg.Unit (fun () -> step := Run), ": Compile a sketch")
+  ("--build", Arg.Unit (fun () -> step := Build), ": Compile a sketch")
 ]
 
-let main filename _ = print_endline filename (* TODO *)
+let main filename step =
+  if not (Sys.file_exists filename) then failwith (Printf.sprintf "File %s doesn't exist !" filename);
+  let filepath = String.split_on_char '/' filename in
+  Compiler.compile filepath;
+  if step = Run then Runner.run filepath else print_endline "Sketch compiled"
 
-let _ = Arg.parse speclist (fun x -> main x step) usage
+let _ = Arg.parse speclist (fun x -> main x !step) usage

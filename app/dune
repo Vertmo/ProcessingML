@@ -1,6 +1,6 @@
 (executable
   (name processingml)
-  (libraries libPML))
+  (libraries unix libPML))
 
 (install
   (section bin)
