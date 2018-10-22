@@ -47,3 +47,11 @@ let compile filePath =
   try Unix.symlink (Printf.sprintf "_build/%s.exe" fileName)
         (Printf.sprintf "%s/%s.exe" filePath fileName)
   with Unix.Unix_error (Unix.EEXIST, _, _) -> ()
+
+let clean filePath =
+  let folderPath = List.rev (List.tl (List.rev filePath))
+  and exeName = List.hd (String.split_on_char '.' (List.hd (List.rev filePath))) in
+  try
+    Sys.remove (Printf.sprintf "%s/%s.exe" (String.concat "/" folderPath) exeName)
+  with Sys_error _ -> ();
+  ignore (Sys.command (Printf.sprintf "rm -rf %s/_build" (String.concat "/" folderPath)))

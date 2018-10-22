@@ -1,5 +1,5 @@
 opam-version: "1.2"
-version: "0.1"
+version: "0.2"
 maintainer: "basile.pesin@gmail.com"
 authors: ["Basile Pesin"]
 homepage: "https://github.com/Vertmo/processingml"
