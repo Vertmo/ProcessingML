@@ -1,3 +1,7 @@
 (executable
   (name processingml)
   (libraries libPML))
+
+(install
+  (section bin)
+  (files (processingml.exe as processingml)))

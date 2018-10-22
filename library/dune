@@ -1,2 +1,6 @@
 (library
   (name libPML))
+
+(install
+  (section lib)
+  (files libPML.cma))
