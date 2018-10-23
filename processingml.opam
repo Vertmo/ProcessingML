@@ -5,6 +5,6 @@ authors: ["Basile Pesin"]
 homepage: "https://github.com/Vertmo/processingml"
 bug-reports: "https://github.com/Vertmo/processingml/issues"
 dev-repo: "https://github.com/Vertmo/processingml.git"
-depends: ["ocaml" "dune"]
+depends: ["ocaml" "ocamlfind" "dune"]
 license: "GNU LGPLv3.0"
 build: ["dune" "build" "@install"]
