@@ -1,6 +1,3 @@
 (library
-  (name libPML))
-
-(install
-  (section lib)
-  (files libPML.cma))
+  (name libPML)
+  (public_name processingml))
