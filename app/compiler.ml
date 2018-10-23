@@ -8,6 +8,8 @@
 
 (** Compilation of sketches *)
 
+exception CompilationException
+
 let create_build_folder (buildPath: string): unit =
   try Unix.mkdir buildPath 0o777;
   with Unix.Unix_error(Unix.EEXIST, _, _) -> ()
@@ -33,15 +35,15 @@ let compile filePath =
   create_build_folder buildPath;
 
   (* Compile the specific sketch *)
-  ignore (Sys.command (Printf.sprintf "ocamlc -c -o %s/%s.cmo %s/%s.ml"
-                         buildPath fileName filePath fileName));
+  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -c -o %s/%s.cmo libPML.cma %s/%s.ml"
+                         buildPath fileName filePath fileName)) <> 0 then raise CompilationException;
 
   (* Create a file containing call to main methods, and compile it *)
   create_sketch_file buildPath moduleName;
 
   (* Compile whole sketch *)
-  ignore (Sys.command (Printf.sprintf "ocamlc -I %s -o %s/%s.exe %s/%s.cmo %s/sketch.ml"
-                         buildPath buildPath fileName buildPath fileName buildPath));
+  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -I %s -o %s/%s.exe libPML.cma %s/%s.cmo %s/sketch.ml"
+                         buildPath buildPath fileName buildPath fileName buildPath)) <> 0 then raise CompilationException;
 
   (* Creates symlink in the main folder *)
   try Unix.symlink (Printf.sprintf "_build/%s.exe" fileName)

@@ -8,6 +8,9 @@
 
 (** Compilation of sketches *)
 
+(** Exception occuring when compilation fails *)
+exception CompilationException
+
 (** {! compile f} compiles the file located at path [f] *)
 val compile : string list -> unit
 
