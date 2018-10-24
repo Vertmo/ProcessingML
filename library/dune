@@ -1,3 +1,4 @@
 (library
   (name libPML)
-  (public_name processingml))
+  (public_name processingml)
+  (libraries graphics))
