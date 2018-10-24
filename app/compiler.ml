@@ -17,7 +17,10 @@ let create_build_folder (buildPath: string): unit =
 let create_sketch_file (buildPath: string) (moduleName: string): unit =
   let chan = open_out (Printf.sprintf "%s/sketch.ml" buildPath) in
   output_string chan (Printf.sprintf "open %s\n" moduleName);
-  output_string chan "let _ = setup (); while(true) do draw (); done";
+  output_string chan "let _ = let start = setup () in \
+                      let rec draw_rec s = \
+                      draw_rec (draw s) in \
+                      draw_rec start";
   close_out chan
 
 let compile filePath =

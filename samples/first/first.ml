@@ -2,6 +2,6 @@
 
 open LibPML
 
-let setup () = print_endline "setup"
+let setup () = print_endline "setup"; 0
 
-let draw () = Test.hello ()
+let draw i = print_int i; Test.hello (); (i+1)
