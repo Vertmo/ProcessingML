@@ -35,14 +35,14 @@ let compile filePath =
   create_build_folder buildPath;
 
   (* Compile the specific sketch *)
-  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -c -o %s/%s.cmo libPML.cma %s/%s.ml"
+  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -c -o %s/%s.cmo graphics.cma libPML.cma %s/%s.ml"
                          buildPath fileName filePath fileName)) <> 0 then raise CompilationException;
 
   (* Create a file containing call to main methods, and compile it *)
   create_sketch_file buildPath moduleName;
 
   (* Compile whole sketch *)
-  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -I %s -o %s/%s.exe libPML.cma %s/%s.cmo %s/sketch.ml"
+  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -I %s -o %s/%s.exe graphics.cma libPML.cma %s/%s.cmo %s/sketch.ml"
                          buildPath buildPath fileName buildPath fileName buildPath)) <> 0 then raise CompilationException;
 
   (* Creates symlink in the main folder *)
