@@ -17,7 +17,10 @@ let create_build_folder (buildPath: string): unit =
 let create_sketch_file (buildPath: string) (moduleName: string): unit =
   let chan = open_out (Printf.sprintf "%s/sketch.ml" buildPath) in
   output_string chan (Printf.sprintf "open %s\n" moduleName);
-  output_string chan "let _ = setup (); while(true) do draw (); done";
+  output_string chan "let _ = let start = setup () in \
+                      let rec draw_rec s = \
+                      draw_rec (draw s) in \
+                      draw_rec start";
   close_out chan
 
 let compile filePath =
@@ -35,14 +38,14 @@ let compile filePath =
   create_build_folder buildPath;
 
   (* Compile the specific sketch *)
-  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -c -o %s/%s.cmo libPML.cma %s/%s.ml"
+  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -c -o %s/%s.cmo graphics.cma libPML.cma %s/%s.ml"
                          buildPath fileName filePath fileName)) <> 0 then raise CompilationException;
 
   (* Create a file containing call to main methods, and compile it *)
   create_sketch_file buildPath moduleName;
 
   (* Compile whole sketch *)
-  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -I %s -o %s/%s.exe libPML.cma %s/%s.cmo %s/sketch.ml"
+  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -I %s -o %s/%s.exe graphics.cma libPML.cma %s/%s.cmo %s/sketch.ml"
                          buildPath buildPath fileName buildPath fileName buildPath)) <> 0 then raise CompilationException;
 
   (* Creates symlink in the main folder *)
