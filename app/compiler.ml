@@ -17,10 +17,16 @@ let create_build_folder (buildPath: string): unit =
 let create_sketch_file (buildPath: string) (moduleName: string): unit =
   let chan = open_out (Printf.sprintf "%s/sketch.ml" buildPath) in
   output_string chan (Printf.sprintf "open %s\n" moduleName);
-  output_string chan "let _ = let start = setup () in \
-                      let rec draw_rec s = \
-                      draw_rec (draw s) in \
-                      draw_rec start";
+  output_string chan "open LibPML.Color\n";
+  output_string chan
+    "let _ = let start = setup () in\n\
+     Graphics.auto_synchronize false;\n\
+     let rec draw_rec s =\n\
+     draw_rec (\
+     Graphics.set_color (int_of_color (current_background ()));\
+     Graphics.fill_rect 0 0 (Graphics.size_x ()) (Graphics.size_y ());\n\
+     let s = draw s in Graphics.synchronize (); s) in\n\
+     draw_rec start";
   close_out chan
 
 let compile filePath =
