@@ -23,6 +23,7 @@ let create_sketch_file (buildPath: string) (moduleName: string): unit =
      Graphics.auto_synchronize false;\n\
      let rec draw_rec s =\n\
      draw_rec (\
+     Unix.sleepf (1./.60.);
      Graphics.set_color (int_of_color (current_background ()));\
      Graphics.fill_rect 0 0 (Graphics.size_x ()) (Graphics.size_y ());\n\
      let s = draw s in Graphics.synchronize (); s) in\n\
@@ -44,14 +45,14 @@ let compile filePath =
   create_build_folder buildPath;
 
   (* Compile the specific sketch *)
-  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -c -o %s/%s.cmo graphics.cma libPML.cma %s/%s.ml"
+  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -c -o %s/%s.cmo graphics.cma unix.cma libPML.cma %s/%s.ml"
                          buildPath fileName filePath fileName)) <> 0 then raise CompilationException;
 
   (* Create a file containing call to main methods, and compile it *)
   create_sketch_file buildPath moduleName;
 
   (* Compile whole sketch *)
-  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -I %s -o %s/%s.exe graphics.cma libPML.cma %s/%s.cmo %s/sketch.ml"
+  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -I %s -o %s/%s.exe graphics.cma unix.cma libPML.cma %s/%s.cmo %s/sketch.ml"
                          buildPath buildPath fileName buildPath fileName buildPath)) <> 0 then raise CompilationException;
 
   (* Creates symlink in the main folder *)
