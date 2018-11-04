@@ -4,4 +4,7 @@ open LibPML
 
 let setup () = Env.size 720 400
 
-let draw () = ()
+let draw () =
+  Color.background (Color.color_of_rgb 0 255 255);
+  Color.stroke (Color.color_of_rgb 255 0 0);
+  Color.fill (Color.color_of_rgb 0 255 0)
