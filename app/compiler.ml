@@ -23,9 +23,7 @@ let create_sketch_file (buildPath: string) (moduleName: string): unit =
      Graphics.auto_synchronize false;\n\
      let rec draw_rec s =\n\
      draw_rec (\
-     Unix.sleepf (1./.60.);
-     Graphics.set_color (int_of_color (current_background ()));\
-     Graphics.fill_rect 0 0 (Graphics.size_x ()) (Graphics.size_y ());\n\
+     Unix.sleepf (1./.60.);\n\
      let s = draw s in Graphics.synchronize (); s) in\n\
      draw_rec start";
   close_out chan

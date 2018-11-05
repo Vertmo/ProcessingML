@@ -2,11 +2,13 @@
 
 open LibPML
 
-let setup () = Env.size 720 400
-
-let draw () =
-  Color.background (Color.color_of_rgb 0 255 255);
+let setup () = Env.size 720 400;
   Color.stroke (Color.color_of_rgb 255 0 0);
   Color.fill (Color.color_of_rgb 0 255 0);
-  Shape.rect 20 20 100 50;
-  Shape.rect 50 30 100 50;
+  20
+
+let draw x =
+  Color.background (Color.color_of_rgb 0 255 255);
+  Shape.rect x 20 100 50;
+  Shape.rect (x+30) 30 100 50;
+  (x + 5) mod Env.width ()

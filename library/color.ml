@@ -33,13 +33,11 @@ let blue c = int_of_char c.b
 type color_state_t = {
   mutable fill: color;
   mutable stroke: color;
-  mutable background: color;
 }
 
 let color_state = {
   fill = color_of_rgb 0 0 0;
   stroke = color_of_rgb 0 0 0;
-  background = color_of_rgb 255 255 255;
 }
 
 let fill c = color_state.fill<-c
@@ -50,6 +48,6 @@ let stroke c = color_state.stroke<-c
 
 let current_stroke () = color_state.stroke
 
-let background c = color_state.background<-c
-
-let current_background () = color_state.background
+let background c =
+  Graphics.set_color (int_of_color c);
+  Graphics.fill_rect 0 0 (Env.width ()) (Env.height ())

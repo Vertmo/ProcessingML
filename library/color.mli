@@ -39,8 +39,5 @@ val stroke: color -> unit
 (** Gets the color used to draw lines and borders around shapes *)
 val current_stroke: unit -> color
 
-(** Sets the color used for the background of the processing window *)
+(** Draws a background of the given color *)
 val background: color -> unit
-
-(** Gets the color used for the background of the processing window *)
-val current_background: unit -> color
