@@ -11,4 +11,5 @@ let setup () =
 
 let draw () =
   background (color_of_rgb 127 127 127);
-  rect 10 20 50 60;
+  rect 60 120 50 60;
+  ellipse 300 100 160 100

@@ -10,3 +10,6 @@
 
 (** Draws a rectangle to the screen *)
 val rect: int -> int -> int -> int -> unit
+
+(** Draws an ellipse to the screen *)
+val ellipse: int -> int -> int -> int -> unit
