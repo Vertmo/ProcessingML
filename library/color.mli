@@ -30,14 +30,20 @@ val blue: color -> int
 (** Sets the color used to fill shapes *)
 val fill: color -> unit
 
+(** Disables filling geometry *)
+val no_fill: unit -> unit
+
 (** Gets the color used to fill shapes *)
-val current_fill: unit -> color
+val current_fill: unit -> color option
 
 (** Sets the color used to draw lines and borders around shapes *)
 val stroke: color -> unit
 
+(** Disables stroking outlines *)
+val no_stroke: unit -> unit
+
 (** Gets the color used to draw lines and borders around shapes *)
-val current_stroke: unit -> color
+val current_stroke: unit -> color option
 
 (** Draws a background of the given color *)
 val background: color -> unit

@@ -5,12 +5,12 @@ open Color
 open Shape
 
 let setup () =
-  Env.size 720 400;
-  stroke (color_of_rgb 0 0 0);
-  fill (color_of_rgb 255 255 255)
+  Env.size 720 400
 
 let draw () =
   background (color_of_rgb 127 127 127);
+  stroke (color_of_rgb 0 0 0);
+  fill (color_of_rgb 255 255 255);
   rect 60 120 50 60;
   ellipse 300 100 160 100;
   line 30 20 85 20;
@@ -22,6 +22,7 @@ let draw () =
   point 360 200; (* Somewhat at the center *)
 
   arc 500 250 50 50 0. (Float.pi/.2.);
+  no_fill ();
   arc 500 250 60 60 (Float.pi/.2.) Float.pi;
   arc 500 250 70 70 Float.pi (Float.pi*.5./.4.);
   arc 500 250 80 80 (Float.pi*.5./.4.) (Float.pi*.2.)

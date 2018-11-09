@@ -31,20 +31,24 @@ let green c = int_of_char c.g
 let blue c = int_of_char c.b
 
 type color_state_t = {
-  mutable fill: color;
-  mutable stroke: color;
+  mutable fill: color option;
+  mutable stroke: color option;
 }
 
 let color_state = {
-  fill = color_of_rgb 0 0 0;
-  stroke = color_of_rgb 0 0 0;
+  fill = Some (color_of_rgb 0 0 0);
+  stroke = Some (color_of_rgb 0 0 0);
 }
 
-let fill c = color_state.fill<-c
+let fill c = color_state.fill<-(Some c)
+
+let no_fill () = color_state.fill<-None
 
 let current_fill () = color_state.fill
 
-let stroke c = color_state.stroke<-c
+let stroke c = color_state.stroke<-(Some c)
+
+let no_stroke () = color_state.stroke<-None
 
 let current_stroke () = color_state.stroke
 
