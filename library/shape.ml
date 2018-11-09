@@ -6,6 +6,14 @@
 (*                                                                            *)
 (******************************************************************************)
 
+let arc x y w h start stop =
+  let degree_of_radian (a:float):int = int_of_float (a *. 180. /. Float.pi) in
+  let y = Env.height () - (y+1) in
+  Graphics.set_color (Color.int_of_color (Color.current_fill ()));
+  Graphics.fill_arc x y (w/2) (h/2) (degree_of_radian (-.start)) (degree_of_radian (-.stop));
+  Graphics.set_color (Color.int_of_color (Color.current_stroke ()));
+  Graphics.draw_arc x y (w/2) (h/2) (degree_of_radian (-.start)) (degree_of_radian (-.stop))
+
 let ellipse x y w h =
   let y = Env.height () - (y+1) in
   Graphics.set_color (Color.int_of_color (Color.current_fill ()));
@@ -17,6 +25,11 @@ let line x1 y1 x2 y2 =
   let y1 = Env.height () - (y1+1) and y2 = Env.height () - (y2+1) in
   Graphics.set_color (Color.int_of_color (Color.current_stroke ()));
   Graphics.draw_segments [|(x1,y1,x2,y2)|]
+
+let point x y =
+  let y = Env.height () - (y+1) in
+  Graphics.set_color (Color.int_of_color (Color.current_stroke ()));
+  Graphics.plot x y
 
 let quad x1 y1 x2 y2 x3 y3 x4 y4 =
   let y1 = Env.height () - (y1+1) and y2 = Env.height () - (y2+1)

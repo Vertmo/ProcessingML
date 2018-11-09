@@ -8,11 +8,17 @@
 
 (** Drawing shapes *)
 
+(** Draws an arc to the screen *)
+val arc: int -> int -> int -> int -> float -> float -> unit
+
 (** Draws an ellipse to the screen *)
 val ellipse: int -> int -> int -> int -> unit
 
 (** Draws a line to the screen *)
 val line: int -> int -> int -> int -> unit
+
+(** Draws a point to the screen *)
+val point: int -> int -> unit
 
 (** Draws a quadrilateral (4-sided polygon) to the screen *)
 val quad: int -> int -> int -> int -> int -> int -> int -> int -> unit
