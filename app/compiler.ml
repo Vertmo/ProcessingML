@@ -16,16 +16,24 @@ let create_build_folder (buildPath: string): unit =
 
 let create_sketch_file (buildPath: string) (moduleName: string): unit =
   let chan = open_out (Printf.sprintf "%s/sketch.ml" buildPath) in
+  output_string chan "open LibPML.Input\n";
   output_string chan (Printf.sprintf "open %s\n" moduleName);
-  output_string chan "open LibPML.Color\n";
   output_string chan
-    "let _ = let start = setup () in\n\
+    "let _ = let rstart = ref (setup ()) in\n\
      Graphics.auto_synchronize false;\n\
-     let rec draw_rec s =\n\
-     draw_rec (\
+     let mt = Mutex.create () in\n\
+     let rec handle_event rs =\n\
+     let evstat = Graphics.wait_next_event [Graphics.Button_down; Graphics.Key_pressed] in\n\
+     (if evstat.keypressed then (Mutex.lock mt; rs := key_pressed !rs; Mutex.unlock mt)\n\
+     else (Mutex.lock mt; rs := mouse_clicked !rs; Mutex.unlock mt);\n\
+     handle_event rs) in\n\
+     ignore (Thread.create handle_event rstart);\n\
+     let rec draw_rec rs =\n\
      Unix.sleepf (1./.60.);\n\
-     let s = draw s in Graphics.synchronize (); s) in\n\
-     draw_rec start";
+     Mutex.lock mt;\
+     rs := draw !rs; Graphics.synchronize ();\
+     Mutex.unlock mt; draw_rec rs in\n\
+     draw_rec rstart";
   close_out chan
 
 let compile filePath =
@@ -50,7 +58,7 @@ let compile filePath =
   create_sketch_file buildPath moduleName;
 
   (* Compile whole sketch *)
-  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -I %s -o %s/%s.exe graphics.cma unix.cma libPML.cma %s/%s.cmo %s/sketch.ml"
+  if (Sys.command (Printf.sprintf "ocamlfind ocamlc -package processingml -I %s -I +threads -o %s/%s.exe graphics.cma unix.cma threads.cma libPML.cma %s/%s.cmo %s/sketch.ml"
                          buildPath buildPath fileName buildPath fileName buildPath)) <> 0 then raise CompilationException;
 
   (* Creates symlink in the main folder *)
