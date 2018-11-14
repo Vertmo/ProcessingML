@@ -24,7 +24,7 @@ let create_sketch_file (buildPath: string) (moduleName: string): unit =
      let mt = Mutex.create () in\n\
      let rec handle_event rs =\n\
      let evstat = Graphics.wait_next_event [Graphics.Button_down; Graphics.Key_pressed] in\n\
-     (if evstat.keypressed then (Mutex.lock mt; rs := key_pressed !rs; Mutex.unlock mt)\n\
+     (if evstat.keypressed then (Mutex.lock mt; rs := key_pressed !rs evstat.key; Mutex.unlock mt)\n\
      else (Mutex.lock mt; rs := mouse_clicked !rs; Mutex.unlock mt);\n\
      handle_event rs) in\n\
      ignore (Thread.create handle_event rstart);\n\

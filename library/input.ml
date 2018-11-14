@@ -12,4 +12,4 @@ let mouse_y () = Env.height () - (snd (Graphics.mouse_pos ())+1)
 
 let mouse_clicked s = s
 
-let key_pressed s = s
+let key_pressed s _ = s

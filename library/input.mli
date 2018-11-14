@@ -18,4 +18,4 @@ val mouse_y: unit -> int
 val mouse_clicked: 'a -> 'a
 
 (** This function is called once every time a key is pressed *)
-val key_pressed: 'a -> 'a
+val key_pressed: 'a -> char -> 'a
