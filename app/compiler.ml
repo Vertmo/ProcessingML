@@ -10,6 +10,17 @@
 
 exception CompilationException
 
+let read_file filename =
+let lines = ref [] in
+let chan = open_in filename in
+try
+  while true; do
+    lines := input_line chan :: !lines
+  done; !lines
+with End_of_file ->
+  close_in chan;
+  List.rev !lines;;
+
 let create_build_folder (buildPath: string): unit =
   try Unix.mkdir buildPath 0o777;
   with Unix.Unix_error(Unix.EEXIST, _, _) -> ()
@@ -18,22 +29,9 @@ let create_sketch_file (buildPath: string) (moduleName: string): unit =
   let chan = open_out (Printf.sprintf "%s/sketch.ml" buildPath) in
   output_string chan "open LibPML.Input\n";
   output_string chan (Printf.sprintf "open %s\n" moduleName);
-  output_string chan
-    "let _ = let rstart = ref (setup ()) in\n\
-     Graphics.auto_synchronize false;\n\
-     let mt = Mutex.create () in\n\
-     let rec handle_event rs =\n\
-     let evstat = Graphics.wait_next_event [Graphics.Button_down; Graphics.Key_pressed] in\n\
-     (if evstat.keypressed then (Mutex.lock mt; rs := key_pressed !rs evstat.key; Mutex.unlock mt)\n\
-     else (Mutex.lock mt; rs := mouse_clicked !rs; Mutex.unlock mt);\n\
-     handle_event rs) in\n\
-     ignore (Thread.create handle_event rstart);\n\
-     let rec draw_rec rs =\n\
-     Unix.sleepf (1./.60.);\n\
-     Mutex.lock mt;\
-     rs := draw !rs; Graphics.synchronize ();\
-     Mutex.unlock mt; draw_rec rs in\n\
-     draw_rec rstart";
+  let pmlInput = Unix.open_process_in "ocamlfind query processingml" in
+  let mainSketch = read_file ((input_line pmlInput)^"/sketchbasis.ml") in
+  output_string chan (String.concat "\n" mainSketch);
   close_out chan
 
 let compile filePath =

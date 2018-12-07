@@ -1,4 +1,9 @@
 (library
   (name libPML)
   (public_name processingml)
+  (modules Env Color Input Shape)
   (libraries graphics))
+
+(install
+  (section lib)
+  (files sketchbasis.ml))
