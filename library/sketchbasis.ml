@@ -4,12 +4,15 @@
 let _ = let rstart = ref (setup ()) in
   Graphics.auto_synchronize false;
   let mt = Mutex.create () in
+
   let rec handle_event rs =
-    let evstat = Graphics.wait_next_event [Graphics.Button_down; Graphics.Key_pressed] in
+    let evstat = Graphics.wait_next_event [Graphics.Button_down; Graphics.Key_pressed; Graphics.Mouse_motion] in
     (if evstat.keypressed then (Mutex.lock mt; rs := key_pressed !rs evstat.key; Mutex.unlock mt)
-     else (Mutex.lock mt; rs := mouse_clicked !rs; Mutex.unlock mt);
+     else if evstat.button then (Mutex.lock mt; rs := mouse_clicked !rs; Mutex.unlock mt)
+     else (Mutex.lock mt; rs := mouse_moved !rs; Mutex.unlock mt);
      handle_event rs) in
   ignore (Thread.create handle_event rstart);
+
   let rec draw_rec rs =
     Unix.sleepf (1./.60.);
     Mutex.lock mt;
